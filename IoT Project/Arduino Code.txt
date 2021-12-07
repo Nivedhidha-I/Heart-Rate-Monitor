@@ -1,0 +1,113 @@
+#include <LiquidCrystal.h>
+
+#define Sensor A0
+#define d7 2
+#define d6 3
+#define d5 4
+#define d4 5
+#define buzzer 6
+#define LED 8
+#define enable 11
+#define rs 12
+
+double alpha=0.75;
+int period=20;
+double refresh=0.0;
+
+LiquidCrystal lcd(rs, enable, d4, d5, d6, d7);
+
+byte mini_heart[8] = { B00000, B00000, B01010, B11111, B11111, B01110, B00100, B00000 };
+byte large_heart1[8] = { 0b11111, 0b11111, 0b11111, 0b01111, 0b00111, 0b00011, 0b00001, 0b00000 };
+byte large_heart2[8] = { 0b00000, 0b00000, 0b00000, 0b00100, 0b01110, 0b11111, 0b11111, 0b11111 };
+byte large_heart3[8] = { 0b11111, 0b11111, 0b11111, 0b11110, 0b11100, 0b11000, 0b10000, 0b00000 };
+byte large_heart4[8] = { 0b00000, 0b00000, 0b00000, 0b00100, 0b01110, 0b11111, 0b11111, 0b11111 };
+
+void setup()
+{
+  pinMode(Sensor, INPUT);
+  
+  lcd.begin(16, 2);
+  lcd.clear();
+  lcd.createChar(0, mini_heart); 
+  lcd.createChar(1, large_heart1);
+  lcd.createChar(2, large_heart2);
+  lcd.createChar(3, large_heart3);
+  lcd.createChar(4, large_heart4);
+  
+  pinMode(LED, OUTPUT);
+  pinMode(buzzer,OUTPUT);
+}
+void loop()
+{
+  static double oldValue=0;
+  static double oldrefresh=0; 
+  int beat=analogRead(A0);  //define sensor pin to AO
+  double value=alpha*oldValue+(0-alpha)*beat;
+  refresh=value-oldValue; 
+  
+  lcd.clear();
+  lcd.setCursor(3, 0);
+  lcd.print("Heart Rate"); 
+  lcd.setCursor(4, 1);
+  lcd.print("Monitor");
+  lcd.setCursor(11, 1);
+  lcd.write((byte)0);
+  delay(5000);
+  
+  lcd.clear();
+  lcd.setCursor(2, 0);
+  lcd.write((byte)2);
+  lcd.setCursor(2, 1);
+  lcd.write((byte)1);
+  lcd.setCursor(3, 0);
+  lcd.write((byte)4);
+  lcd.setCursor(3, 1);
+  lcd.write((byte)3);
+  lcd.setCursor(4, 0);
+  lcd.print("HEART BEAT");
+  lcd.setCursor(4, 1);
+  lcd.print("Wait 10 sec");
+  delay(10000);
+  
+  lcd.clear();
+  lcd.setCursor(2, 0);
+  lcd.write((byte)2);
+  lcd.setCursor(2, 1);
+  lcd.write((byte)1);
+  lcd.setCursor(3, 0);
+  lcd.write((byte)4);
+  lcd.setCursor(3, 1);
+  lcd.write((byte)3);
+  lcd.setCursor(4, 0);
+  lcd.print("HEART BEAT");
+  lcd.setCursor(4, 1);
+  lcd.print("BPM: ");
+  lcd.setCursor(9, 1);
+  lcd.print(beat/10);
+  
+  if (beat/10>100)
+  {
+    digitalWrite(buzzer,HIGH);
+    digitalWrite(LED,HIGH);
+    delay(1000);
+    digitalWrite(buzzer,LOW);
+    digitalWrite(LED,LOW);
+    lcd.setCursor(4, 0);
+    lcd.print("EMERGENCY ");
+  }
+  
+  else if(beat/10<60)
+  {
+    digitalWrite(buzzer,HIGH);
+    digitalWrite(LED,HIGH);
+    delay(1000);
+    digitalWrite(buzzer,LOW);
+    digitalWrite(LED,LOW);
+    lcd.setCursor(4, 0);
+    lcd.print("EMERGENCY ");
+  }
+  
+  oldValue=value;
+  oldrefresh=refresh;
+  delay(period*10);  
+}
