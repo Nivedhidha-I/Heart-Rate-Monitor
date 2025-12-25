@@ -18,18 +18,6 @@ This work demonstrates foundational skills in both hardware integration and data
 
 The project required proficiency across hardware, firmware, and desktop analysis environments:
 
-* Hardware: Arduino (e.g., Uno or Nano), Pulse Sensor/Heart Rate Monitor.
+* Hardware: Arduino Uno, Heart Rate Sensor.
 
 * Firmware: C/C++ (Arduino IDE) for sensor reading, signal conditioning, and serial data transmission.
-
-* Data Analysis: Python (or similar) used for post-processing the serial output, smoothing data, and visualizing trends over time.
-
-* Key Metrics Derived: Beats Per Minute (BPM), Heart Rate Variability (HRV - simplified metrics).
-
-## Key Professional Learnings 
-
-* Embedded Systems Development: Gained hands-on experience in the full lifecycle of a basic embedded system, from schematic setup to code deployment.
-
-* Data Integrity in IoT: Focus on ensuring the reliability and accuracy of data captured from physical sensors, a critical skill in the Internet of Things (IoT) space.
-
-* Interdisciplinary Problem Solving: Successfully integrated electrical engineering concepts (sensor reading) with computer science (data processing) to solve a practical monitoring problem.
